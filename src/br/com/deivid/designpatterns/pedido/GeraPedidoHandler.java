@@ -1,5 +1,6 @@
 package br.com.deivid.designpatterns.pedido;
 
+import br.com.deivid.designpatterns.orcamento.ItemOrcamento;
 import br.com.deivid.designpatterns.orcamento.Orcamento;
 import br.com.deivid.designpatterns.pedido.acao.AcaoAposGerarPedido;
 
@@ -16,7 +17,12 @@ public class GeraPedidoHandler {
     }
 
     public void executar(GeraPedido geraPedido) {
-        Orcamento orcamento = new Orcamento(geraPedido.getValorOrcamento(), geraPedido.getQuantidadeItens());
+        Orcamento orcamento = new Orcamento();
+
+        for (int i = 0; i < geraPedido.getQuantidadeItens(); i++) {
+            orcamento.adicionarItem(new ItemOrcamento(geraPedido.getValorOrcamento()));
+        }
+
         Pedido pedido = new Pedido(geraPedido.getCliente(), LocalDateTime.now(), orcamento);
 
         this.acoesAposGerarPedido.forEach(a -> a.executarAcao(pedido));
